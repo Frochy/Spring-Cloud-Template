@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @create 2019/7/11
  * @since 1.0.0
  */
-@FeignClient(value = "service-hi")
+@FeignClient(value = "service-hi",fallback = HelloServiceHytrix.class)
 public interface HelloService {
     //like a controller, but it's a none implementing function.
     @GetMapping(value = "/hi")
