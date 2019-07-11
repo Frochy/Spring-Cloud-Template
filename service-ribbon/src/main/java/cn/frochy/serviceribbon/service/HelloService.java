@@ -8,6 +8,7 @@
  */
 package cn.frochy.serviceribbon.service;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -29,7 +30,19 @@ public class HelloService {
     @Autowired
     private RestTemplate restTemplate;
 
+    /**
+     * HystrixCommand create hytrix , parameter fallbackMethod mark the method
+     * will be used when the provider is crashed.
+     * @param name
+     * @return
+     */
+    @HystrixCommand(fallbackMethod = "errorFallback")
     public String hiService(String name) {
         return restTemplate.getForObject("http://" + providerName + "/hi?name=" + name, String.class);
+    }
+
+    // fallback method
+    public String errorFallback(String name){
+        return "hi, "+name+", sorry, error!";
     }
 }
